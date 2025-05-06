@@ -1,8 +1,7 @@
 from django.db import models
 
 class Client(models.Model):
-    id = models.IntegerField(primary_key=True)
-    username = models.CharField(max_length=80, blank=False, null=False)
+    username = models.CharField(max_length=80, blank=False, null=False, unique=True)
     full_name = models.CharField(max_length=80, blank=False, null=False)
     email = models.EmailField(max_length=80, blank=False, null=False)
     password = models.CharField(max_length=255, blank=False, null=False)
@@ -31,4 +30,4 @@ class Veterinary(models.Model):
     type_service = models.CharField(max_length=20, choices=TYPE_SERVICE, default="clinica", blank=False, null=False)
 
     def __str__(self):
-        return self.crmv
+        return f"{self.crmv} - {self.full_name}" 
