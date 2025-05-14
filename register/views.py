@@ -1,8 +1,9 @@
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Client
-from .serializers import ClientSerializer
+from .serializers import ClientSerializer, LoginSerializer
 from datetime import datetime
 
 # Create your views here.
@@ -34,14 +35,25 @@ class RegisterClientViewset(viewsets.ViewSet):
         params['date_of_birth'] = datetime.strptime(params["date_of_birth"],'%d/%m/%Y')
         return params
 
-"""
-from django.contrib.auth.hashers import check_password
+class LoginViewSet(viewsets.ViewSet):
+    serializer_class = LoginSerializer
 
-senha_digitada = 'minha_senha123'
-senha_hash_salva = usuario.password  # por exemplo, vindo do banco
+    def create(self, request):
+        if request.method == "POST":
+            try:
+                response = self.verify_password(request.data)
+                return Response({
+                    "status": status.HTTP_200_OK,
+                    "message": f"{response}"})
+            except Exception as e:
+                return Response({
+                    "status": status.HTTP_400_BAD_REQUEST,
+                    "message": str(e)}
+                )
 
-if check_password(senha_digitada, senha_hash_salva):
-    print('Senha correta!')
-else:
-    print('Senha incorreta.')
-"""
+    def verify_password(self, data: dict) -> str:
+        client = authenticate(username=data['username'], password=data['password'])
+        if client is not None:
+            return "Login Realizado com Sucesso!"
+        else:
+            return "Usuário ou Senha estão incorretos!"
