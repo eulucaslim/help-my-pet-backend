@@ -8,7 +8,6 @@ from datetime import datetime
 
 # Create your views here.
 class RegisterClientViewset(viewsets.ViewSet):
-    queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
     def create(self, request):
@@ -32,7 +31,9 @@ class RegisterClientViewset(viewsets.ViewSet):
                 params[key] = value
 
         params['password'] = make_password(params['password'])
-        params['date_of_birth'] = datetime.strptime(params["date_of_birth"],'%d/%m/%Y')
+        params['date_of_birth'] = datetime.strptime(params["date_of_birth"],'%Y-%m-%d')
+        if params.get('csrfmiddlewaretoken'):
+            del params['csrfmiddlewaretoken']
         return params
 
 class LoginViewSet(viewsets.ViewSet):
@@ -52,8 +53,12 @@ class LoginViewSet(viewsets.ViewSet):
                 )
 
     def verify_password(self, data: dict) -> str:
-        client = authenticate(username=data['username'], password=data['password'])
-        if client is not None:
+        try:
+            client = authenticate(username=data['username'], password=data['password'])
             return "Login Realizado com Sucesso!"
-        else:
-            return "Usuário ou Senha estão incorretos!"
+        except Exception:
+            raise ("Usuário ou Senha estão incorretos!")
+
+class AllUsersViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer

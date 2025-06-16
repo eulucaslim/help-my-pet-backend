@@ -4,7 +4,7 @@ from .models import Client
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        exclude = ['id']
+        fields = '__all__'
 
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
