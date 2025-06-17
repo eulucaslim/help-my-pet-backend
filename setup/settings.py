@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from datetime import timedelta
+
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    'dj_rest_auth',
     'register',
     'evaluation',
 ]
@@ -131,23 +130,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-AUTH_USER_MODEL = 'register.Client'
-
-AUTHENTICATION_BACKENDS = ['register.Client']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_AUTH = {
-    'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'djangojwtauth_cookie',
-    'JWT_AUTH_REFRESH_COOKIE': 'djangojwtauth_refresh_cookie'
-}
-
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
 }

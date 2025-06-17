@@ -7,9 +7,6 @@ router = DefaultRouter()
 router.register("register", RegisterClientViewset,
                 basename="register")
 
-router.register("login", LoginViewSet,
-                basename="login")
-
 router.register("all_users", AllUsersViewSet,
                 basename="all_users")
 
