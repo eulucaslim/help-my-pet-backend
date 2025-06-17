@@ -1,12 +1,13 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class Client(models.Model):
+class Client(AbstractUser):
     username = models.CharField(max_length=80, blank=False, null=False, unique=True)
     full_name = models.CharField(max_length=80, blank=False, null=False)
     email = models.EmailField(max_length=80, blank=False, null=False)
     password = models.CharField(max_length=255, blank=False, null=False)
     profile_picture = models.ImageField(upload_to='data/photos/', blank=True, null=True)
-    date_of_birth = models.DateField(blank=False, null=False)
+    date_of_birth = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.username
